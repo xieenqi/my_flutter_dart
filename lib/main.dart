@@ -4,22 +4,26 @@ import 'package:my_flutter_dart/common/config/Themes.dart';
 
 void main() => runApp(MyApp());
 
+//var _context = myContext1;
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo 转得快',
-      theme:defaultTargetPlatform == TargetPlatform.iOS
-            ? Themes.kIOSTheme
-            : Themes.kDefaultTheme, // 根据平台获取主题
+      theme: defaultTargetPlatform == TargetPlatform.iOS
+          ? Themes.kIOSTheme
+          : Themes.kDefaultTheme, // 根据平台获取主题
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
+    var myContext = context;
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
+
 //此小部件是应用程序的主页。 这是有状态的，意思
 //它有一个State对象（在下面定义），其中包含影响的字段
 // 它看起来如何
@@ -52,6 +56,18 @@ var _controller = PageController(
 
 _onAdd() {
 //  setState(() {});
+ new Builder(builder: (BuildContext context) {
+    return new Center(
+      child: new GestureDetector(
+        onTap: () {
+          final snackBar =
+          new SnackBar(content: new Text('这是一个SnackBar'));
+          Scaffold.of(context).showSnackBar(snackBar);
+        },
+        child: new Text('显示SnackBar'),
+      ),
+    );
+  });
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -63,19 +79,20 @@ class _MyHomePageState extends State<MyHomePage> {
         children: _pages,
         physics: NeverScrollableScrollPhysics(), // 进制滑动切换
       ),
+/*圆形发布按钮*/
       floatingActionButton: new Builder(builder: (BuildContext context) {
         return new FloatingActionButton(
           backgroundColor: Colors.deepOrange,
-          onPressed: _onAdd,
-          child: const Icon(Icons.add, color: Colors.white),
-          //tooltip: "发布", // 常按显示提示
-          //heroTag: null, // 去除系统默认动画效果
+          onPressed: _onAdd(),
+          child: const Icon(Icons.add_box, color: Colors.white),
+          tooltip: "发布", // 常按显示提示
+//          heroTag: null, // 去除系统默认动画效果
         );
       }),
+/* 添加圆形发布按钮位置*/
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // 添加按钮位置
+/*底部导航点击事件*/
       bottomNavigationBar: BottomNavigationBar(
-        //底部导航点击事件
         currentIndex: _currentIndex,
         onTap: (index) {
           var _index = index;
@@ -84,7 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
             _onAdd();
             return;
           }
-          // _controller.animateToPage(_index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn); // 动画效果 切换
+//          _controller.animateToPage(_index,
+//              duration: Duration(milliseconds: 1000),
+//              curve: Curves.fastOutSlowIn); // 动画效果 切换
           _controller.jumpToPage(_index); // 无动画效果切换
           setState(() {
             _currentIndex = _index;
